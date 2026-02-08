@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nicco Bot</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Trebuchet MS", sans-serif;
+    }
+
+    body{
+      overflow-x:hidden;
+    }
+
+    /* Fade animation */
+    .fade{
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0; transform:translateY(10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    /* ================= INTRO ================= */
+    #intro{
+      height:100vh;
+      width:100%;
+      background:black;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      gap:20px;
+      color:white;
+      text-align:center;
+    }
+
+    .glassBox{
+      padding:25px 40px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(18px);
+      box-shadow:0 0 30px rgba(0,255,255,0.25);
+    }
+
+    #welcomeText{
+      font-size:60px;
+      font-weight:bold;
+      text-shadow:0 0 20px rgba(0,255,255,0.65);
+    }
+
+    #chooseLang{
+      font-size:15px;
+      opacity:0.85;
+    }
+
+    select{
+      padding:12px;
+      border-radius:14px;
+      border:none;
+      outline:none;
+      font-size:16px;
+      width:270px;
+      text-align:center;
+    }
+
+    button{
+      cursor:pointer;
+      padding:14px 30px;
+      border:none;
+      border-radius:18px;
+      font-size:18px;
+      font-weight:bold;
+      transition:0.25s;
+    }
+
+    button:hover{
+      transform:scale(1.06);
+      opacity:0.92;
+    }
+
+    #goBtn{
+      background:rgba(0,255,255,0.18);
+      color:white;
+      border:1px solid rgba(0,255,255,0.45);
+      backdrop-filter:blur(10px);
+      box-shadow:0 0 15px rgba(0,255,255,0.25);
+    }
+
+    /* ================= HOME ================= */
+    #home{
+      display:none;
+      min-height:100vh;
+      background:linear-gradient(to bottom, #7fe3ff, #00314f);
+      color:white;
+      padding:35px;
+      text-align:center;
+    }
+
+    #homeTitle{
+      font-size:52px;
+      margin-top:55px;
+      text-shadow:0 0 22px rgba(255,255,255,0.55);
+    }
+
+    #homeDesc{
+      margin-top:18px;
+      font-size:18px;
+      max-width:700px;
+      margin-inline:auto;
+      opacity:0.92;
+      line-height:1.5;
+    }
+
+    .btnRow{
+      margin-top:45px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:16px;
+    }
+
+    .mainBtn{
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.25);
+      backdrop-filter:blur(14px);
+      color:white;
+      padding:16px 22px;
+      min-width:210px;
+      border-radius:20px;
+      font-size:16px;
+      box-shadow:0 0 18px rgba(0,0,0,0.25);
+    }
+
+    .discordBtn{
+      background:rgba(88,101,242,0.25);
+      border:1px solid rgba(88,101,242,0.65);
+    }
+
+    /* Menu icon */
+    #menuIcon{
+      position:fixed;
+      top:20px;
+      right:22px;
+      font-size:40px;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    /* Side panel */
+    #sidePanel{
+      position:fixed;
+      top:0;
+      right:-340px;
+      width:320px;
+      height:100%;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter:blur(20px);
+      transition:0.4s;
+      padding:28px;
+      color:white;
+      box-shadow:-10px 0 25px rgba(0,0,0,0.4);
+      z-index:999;
+    }
+
+    #sidePanel.active{
+      right:0;
+    }
+
+    /* Panel header */
+    .panelHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    #closePanel{
+      background:rgba(255,255,255,0.15);
+      border:none;
+      color:white;
+      font-size:18px;
+      padding:8px 12px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+
+    /* Side buttons */
+    .sideBtn{
+      width:100%;
+      text-align:left;
+      margin:10px 0;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.25);
+      background:rgba(255,255,255,0.10);
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .sideBtn:hover{
+      transform:scale(1.03);
+      opacity:0.9;
+    }
+
+    footer{
+      margin-top:70px;
+      opacity:0.65;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- INTRO -->
+  <div id="intro" class="fade">
+    <div class="glassBox">
+      <h1 id="welcomeText">Welcome</h1>
+    </div>
+
+    <p id="chooseLang">Choose your language:</p>
+
+    <select id="langSelect"></select>
+
+    <button id="goBtn">Let's go</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="fade">
+
+    <div id="menuIcon">☰</div>
+
+    <h1 id="homeTitle">Hello, I'm Nicco</h1>
+
+    <p id="homeDesc">
+      Nicco is your complete Discord companion: moderation, fun commands,
+      Vegas-style betting games, bubbles economy, daily rewards, trolling tools,
+      and almost anything your server needs.
+    </p>
+
+    <div class="btnRow">
+      <button class="mainBtn" onclick="alert('TopGG link soon')">
+        ⭐ Vote TopGG
+      </button>
+
+      <button class="mainBtn" onclick="alert('Dashboard soon')">
+        ⚙ Dashboard
+      </button>
+
+      <button class="mainBtn discordBtn" onclick="alert('Discord OAuth soon')">
+        🔑 Login with Discord
+      </button>
+
+      <button class="mainBtn" onclick="alert('Bubble shop soon')">
+        💎 Buy Bubbles
+      </button>
+    </div>
+
+    <footer>Nicco ©</footer>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div id="sidePanel">
+    <div class="panelHeader">
+      <h2>Nicco Menu</h2>
+      <button id="closePanel">✖</button>
+    </div>
+
+    <button class="sideBtn">🎁 Daily Rewards</button>
+    <button class="sideBtn">📅 Events (Coming Soon)</button>
+    <button class="sideBtn">📰 Updates</button>
+    <button class="sideBtn">💎 Bubble Shop</button>
+    <button class="sideBtn">⚙ Dashboard</button>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const languages = {
+      en: {
+        welcome:"Welcome",
+        choose:"Choose your language:",
+        go:"Let's go",
+        homeTitle:"Hello, I'm Nicco",
+        homeDesc:"Nicco is your complete Discord companion: moderation, fun commands, Vegas-style betting games, bubbles economy, daily rewards, trolling tools, and almost anything your server needs."
+      },
+      pt: {
+        welcome:"Bem-vindo",
+        choose:"Escolha seu idioma:",
+        go:"Vamos!",
+        homeTitle:"Olá, eu sou o Nicco",
+        homeDesc:"Nicco é seu bot completo para Discord: moderação, comandos divertidos, apostas estilo Las Vegas, economia de bubbles, recompensas diárias e muito mais."
+      }
+    };
+
+    const langSelect = document.getElementById("langSelect");
+    const welcomeText = document.getElementById("welcomeText");
+    const chooseLang = document.getElementById("chooseLang");
+    const goBtn = document.getElementById("goBtn");
+
+    const homeTitle = document.getElementById("homeTitle");
+    const homeDesc = document.getElementById("homeDesc");
+
+    for(let key in languages){
+      let option = document.createElement("option");
+      option.value = key;
+      option.textContent = key.toUpperCase();
+      langSelect.appendChild(option);
+    }
+
+    function updateLanguage(lang){
+      welcomeText.textContent = languages[lang].welcome;
+      chooseLang.textContent = languages[lang].choose;
+      goBtn.textContent = languages[lang].go;
+      homeTitle.textContent = languages[lang].homeTitle;
+      homeDesc.textContent = languages[lang].homeDesc;
+    }
+
+    langSelect.addEventListener("change",()=>{
+      updateLanguage(langSelect.value);
+    });
+
+    goBtn.addEventListener("click",()=>{
+      document.getElementById("intro").style.display="none";
+      document.getElementById("home").style.display="block";
+    });
+
+    const menuIcon = document.getElementById("menuIcon");
+    const sidePanel = document.getElementById("sidePanel");
+    const closePanel = document.getElementById("closePanel");
+
+    menuIcon.addEventListener("click",()=>{
+      sidePanel.classList.add("active");
+    });
+
+    closePanel.addEventListener("click",()=>{
+      sidePanel.classList.remove("active");
+    });
+
+    updateLanguage("en");
+  </script>
+
+</body>
+    </html>
